@@ -1,6 +1,6 @@
 // Standard operation functions
 function add(a, b) {
-    return(a + b);
+    return(Number(a) + Number(b));
 }
 function subtract(a, b) {
     return (a - b);
@@ -13,25 +13,26 @@ function divide(a, b) {
 }
 //----------------------------
 function operate(operator, num1, num2) {
+    console.log(`Operating with: ${operator} using numbers ${num1} and ${num2}`);
     switch(operator){
-        case add:
-            add(num1, num2);
+        case "+":
+            return add(num1, num2);
             break;
-        case subtract:
-            subtract(num1, num2);
+        case "-":
+            return subtract(num1, num2);
             break;
-        case multiply:
-            multiply(num1, num2);
+        case "*":
+            return multiply(num1, num2);
             break;
-        case divide:
-            divide(num1, num2);
+        case "/":
+            return divide(num1, num2);
             break;
         default:
             break;
     }
 }
 
-function screenWrite(symbol) { //Function that writes the number or operator on the calc screen
+function screenWrite(symbol) { //Function that writes the number on the calc screen
     console.log(`Called write function with: ${symbol}`);
     if(calcScreen.value.includes(".") && symbol == "."){
         return
@@ -39,16 +40,41 @@ function screenWrite(symbol) { //Function that writes the number or operator on 
     calcScreen.value += symbol;
 }
 
-function readScreen(){ //function for reading the calculator screen and splitting the contents into num1, num2 and operator
-    console.log("called equals");
+function readScreen(button){ //function for reading the calculator screen when pressing operator or equals btn
+    if(!calcScreen.value) {
+        console.log("tried to use operator without a number");
+        return
+    }
+    oper = button;
+    num1 = calcScreen.value;
+    calcScreen.value = "";
+    console.log(`Chose operator ${oper} with num1: ${num1}`);
 }
 
-function screenClear(){
+function equals(){
+    if(!num1){
+        return //no value for num1 given so we'll stop here
+    }
+    num2 = calcScreen.value;
+    num1 = operate(oper, num1, num2);
+    calcScreen.value = num1;
+    num2 = "";
+}
+
+function screenClear(){ //clears the calculator screen, num1, num2, and the chosen operator
     console.log("called clear");
+    num1 = "";
+    num2 = "";
+    oper = "";
     calcScreen.value = "";
 }
 
-//button functionality
+//initialize the num1, num2, and operator needed
+let num1 = "";
+let num2 = "";
+let oper = "";
+
+//button clicklisteners
 document.getElementById("btn0").onclick = function(){screenWrite("0")};
 document.getElementById("btn1").onclick = function(){screenWrite("1")};
 document.getElementById("btn2").onclick = function(){screenWrite("2")};
@@ -60,13 +86,14 @@ document.getElementById("btn7").onclick = function(){screenWrite("7")};
 document.getElementById("btn8").onclick = function(){screenWrite("8")};
 document.getElementById("btn9").onclick = function(){screenWrite("9")};
 document.getElementById("btnDec").onclick = function(){screenWrite(".")};
-document.getElementById("btnAdd").onclick = function(){screenWrite("+")};
-document.getElementById("btnSub").onclick = function(){screenWrite("-")};
-document.getElementById("btnMult").onclick = function(){screenWrite("*")};
-document.getElementById("btnDiv").onclick = function(){screenWrite("/")};
-document.getElementById("btnClr").onclick = function(){screenClear()};
-document.getElementById("btnEqu").onclick = function(){readScreen()};
 
+document.getElementById("btnClr").onclick = function(){screenClear()};
+document.getElementById("btnEqu").onclick = function(){equals()};
+
+document.getElementById("btnAdd").onclick = function(){readScreen("+")};
+document.getElementById("btnSub").onclick = function(){readScreen("-")};
+document.getElementById("btnMult").onclick = function(){readScreen("*")};
+document.getElementById("btnDiv").onclick = function(){readScreen("/")};
 
 const calcScreen = document.getElementById("screen");
 
