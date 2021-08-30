@@ -33,10 +33,19 @@ function operate(operator, num1, num2) {
 
 function screenWrite(symbol) { //Function that writes the number or operator on the calc screen
     console.log(`Called write function with: ${symbol}`);
+    if(calcScreen.value.includes(".") && symbol == "."){
+        return
+    }
+    calcScreen.value += symbol;
 }
 
 function readScreen(){ //function for reading the calculator screen and splitting the contents into num1, num2 and operator
+    console.log("called equals");
+}
 
+function screenClear(){
+    console.log("called clear");
+    calcScreen.value = "";
 }
 
 //button functionality
@@ -50,10 +59,14 @@ document.getElementById("btn6").onclick = function(){screenWrite("6")};
 document.getElementById("btn7").onclick = function(){screenWrite("7")};
 document.getElementById("btn8").onclick = function(){screenWrite("8")};
 document.getElementById("btn9").onclick = function(){screenWrite("9")};
+document.getElementById("btnDec").onclick = function(){screenWrite(".")};
 document.getElementById("btnAdd").onclick = function(){screenWrite("+")};
 document.getElementById("btnSub").onclick = function(){screenWrite("-")};
 document.getElementById("btnMult").onclick = function(){screenWrite("*")};
 document.getElementById("btnDiv").onclick = function(){screenWrite("/")};
+document.getElementById("btnClr").onclick = function(){screenClear()};
+document.getElementById("btnEqu").onclick = function(){readScreen()};
 
-document.getElementById("btnClr").onClick = function(){screenClear()};
-document.getElementById("btnEqu").onClick = function(){readScreen()};
+
+const calcScreen = document.getElementById("screen");
+
