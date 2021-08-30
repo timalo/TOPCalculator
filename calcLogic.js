@@ -34,8 +34,12 @@ function operate(operator, num1, num2) {
 
 function screenWrite(symbol) { //Function that writes the number on the calc screen
     console.log(`Called write function with: ${symbol}`);
-    if(calcScreen.value.includes(".") && symbol == "."){
+    if((calcScreen.value.includes(".") && symbol == ".") || (calcScreen.value == "" && symbol == ".")){
         return
+    }
+    if(isTheOperatorButtonFreshlyPressed){
+        calcScreen.value = "";
+        isTheOperatorButtonFreshlyPressed = false;
     }
     calcScreen.value += symbol;
 }
@@ -52,13 +56,15 @@ function readScreen(button){ //function for reading the calculator screen when p
         console.log(`Chose operator ${oper} with num1: ${num1}`);   
     }
     else {
-        oper = button;
         num2 = calcScreen.value;
         num1 = operate(oper, num1, num2);
         calcScreen.value = num1;
+        oper = button;
         num2 = "";
+        isTheOperatorButtonFreshlyPressed = true;
     }
 }
+
 function equals(){
     if(!num1){
         return //no value for num1 given so we'll stop here
@@ -81,6 +87,7 @@ function screenClear(){ //clears the calculator screen, num1, num2, and the chos
 let num1 = "";
 let num2 = "";
 let oper = "";
+let isTheOperatorButtonFreshlyPressed = false; //Shut up, perfect variable name
 
 //button clicklisteners
 document.getElementById("btn0").onclick = function(){screenWrite("0")};
