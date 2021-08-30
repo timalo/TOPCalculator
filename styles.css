@@ -1,0 +1,47 @@
+* {
+    margin: auto;
+    text-align: center;
+}
+
+html {
+    background-image: linear-gradient(rgb(175, 122, 224), black);
+    height: 100%;
+    width: auto;
+}
+
+#buttons {
+    height: 360px;
+    width: 360px;
+}
+
+#screenArea{
+    height: 80px;
+    width: 400px;
+}
+
+#screen{
+    height: 60px;
+    width: 320px;
+    font-size: 40px;
+}
+
+#numButtons{
+    width: 400px;
+    text-align: center;
+}
+
+#operButtons{
+    margin-top: 30px;
+    width: 360px;
+}
+
+.buttons {
+    height: 100px;
+    width: 100px;
+    margin: 4px;
+    font-size: 36px;
+    border-color: black;
+    border-style: solid;
+    border-width: 4px;
+    border-radius: 25px;
+}
