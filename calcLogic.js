@@ -40,17 +40,25 @@ function screenWrite(symbol) { //Function that writes the number on the calc scr
     calcScreen.value += symbol;
 }
 
-function readScreen(button){ //function for reading the calculator screen when pressing operator or equals btn
+function readScreen(button){ //function for reading the calculator screen when pressing operator
     if(!calcScreen.value) {
         console.log("tried to use operator without a number");
         return
     }
-    oper = button;
-    num1 = calcScreen.value;
-    calcScreen.value = "";
-    console.log(`Chose operator ${oper} with num1: ${num1}`);
+    if(!num1){
+        oper = button;
+        num1 = calcScreen.value;
+        calcScreen.value = "";
+        console.log(`Chose operator ${oper} with num1: ${num1}`);   
+    }
+    else {
+        oper = button;
+        num2 = calcScreen.value;
+        num1 = operate(oper, num1, num2);
+        calcScreen.value = num1;
+        num2 = "";
+    }
 }
-
 function equals(){
     if(!num1){
         return //no value for num1 given so we'll stop here
