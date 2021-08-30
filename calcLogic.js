@@ -41,6 +41,10 @@ function screenWrite(symbol) { //Function that writes the number on the calc scr
         calcScreen.value = "";
         isTheOperatorButtonFreshlyPressed = false;
     }
+    if(equalButtonFreshlyPressed){
+        calcScreen.value = "";
+        equalButtonFreshlyPressed = false;
+    }
     calcScreen.value += symbol;
 }
 
@@ -49,7 +53,7 @@ function readScreen(button){ //function for reading the calculator screen when p
         console.log("tried to use operator without a number");
         return
     }
-    if(!num1){
+    if(!num1 || equalButtonFreshlyPressed){
         oper = button;
         num1 = calcScreen.value;
         calcScreen.value = "";
@@ -57,8 +61,12 @@ function readScreen(button){ //function for reading the calculator screen when p
     }
     else {
         num2 = calcScreen.value;
+        if(oper == "/" && num2 == 0){
+            alert("Please don't divide by zero");
+            calcScreen.value = "";
+        }
         num1 = operate(oper, num1, num2);
-        calcScreen.value = num1;
+        calcScreen.value = Math.round(num1 * 1000000) / 1000000; //Round to 4 decimals
         oper = button;
         num2 = "";
         isTheOperatorButtonFreshlyPressed = true;
@@ -66,19 +74,36 @@ function readScreen(button){ //function for reading the calculator screen when p
 }
 
 function equals(){
-    if(!num1){
-        return //no value for num1 given so we'll stop here
+    if(equalButtonFreshlyPressed){
+        alert("Please don't press the equal button several times in a row :(");
+        return;
     }
     num2 = calcScreen.value;
-    num1 = operate(oper, num1, num2);
-    calcScreen.value = num1;
-    num2 = "";
+    if(oper == "/" && num2 == 0){
+        console.log("Something has gone horribly wrong");
+        alert("Please don't divide by zero.");
+        calcScreen.value = "";
+        return;
+    }
+    if(!num1 && !num2){
+        alert("No values given for operands");
+        calcScreen.value = "";
+        return; //no value for num1 given so we'll stop here
+    }
+    else{
+        num1 = operate(oper, num1, num2);
+        equalButtonFreshlyPressed = true;
+        calcScreen.value = Math.round(num1 * 1000000) / 1000000; //Round to 4 decimals
+        num2 = "";
+    }
 }
 
 function screenClear(){ //clears the calculator screen, num1, num2, and the chosen operator
     console.log("called clear");
     num1 = "";
     num2 = "";
+    isTheOperatorButtonFreshlyPressed = false;
+    equalButtonFreshlyPressed = false;
     oper = "";
     calcScreen.value = "";
 }
@@ -88,6 +113,7 @@ let num1 = "";
 let num2 = "";
 let oper = "";
 let isTheOperatorButtonFreshlyPressed = false; //Shut up, perfect variable name
+let equalButtonFreshlyPressed = false;
 
 //button clicklisteners
 document.getElementById("btn0").onclick = function(){screenWrite("0")};
